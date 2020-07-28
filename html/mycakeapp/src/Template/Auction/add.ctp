@@ -6,6 +6,10 @@
 		echo $this->Form->hidden('user_id', ['value' => $authuser['id']]);
 		echo '<p><strong>USER: ' . $authuser['username'] . '</strong></p>';
 		echo $this->Form->control('name');
+		echo $this->Form->control('detail', array(
+			'type' => 'textarea',
+			'maxlength' => 1000
+		));
 		echo $this->Form->hidden('finished', ['value' => 0]);
 		echo $this->Form->control('endtime');
 	?>

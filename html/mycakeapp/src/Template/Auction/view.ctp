@@ -9,6 +9,10 @@
 	<td><?= h($biditem->name) ?></td>
 </tr>
 <tr>
+	<th scope="row">商品情報詳細</th>
+	<td><?= h($biditem->detail) ?></td>
+</tr>
+<tr>
 	<th scope="row">商品ID</th>
 	<td><?= $this->Number->format($biditem->id) ?></td>
 </tr>

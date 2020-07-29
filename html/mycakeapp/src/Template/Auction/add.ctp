@@ -6,10 +6,11 @@
 		echo $this->Form->hidden('user_id', ['value' => $authuser['id']]);
 		echo '<p><strong>USER: ' . $authuser['username'] . '</strong></p>';
 		echo $this->Form->control('name');
-		echo $this->Form->control('detail', array(
+		echo $this->Form->control('detail',[
 			'type' => 'textarea',
 			'maxlength' => 1000
-		));
+		]);
+		echo $this->Form->control('image_path',['type' => 'file']);
 		echo $this->Form->hidden('finished', ['value' => 0]);
 		echo $this->Form->control('endtime');
 	?>
@@ -17,3 +18,5 @@
 <?= $this->Form->button(__('Submit')) ?>
 <?= $this->Form->end() ?>
 
+<?php print_r($biditem) ?>
+<?php echo '<br><br><br><br>' ?>

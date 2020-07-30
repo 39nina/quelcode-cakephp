@@ -5,6 +5,7 @@ use App\Controller\AppController;
 
 use Cake\Event\Event; // added.
 use Exception; // added.
+use Symfony\Component\VarDumper\VarDumper;
 
 class AuctionController extends AuctionBaseController
 {
@@ -86,7 +87,6 @@ class AuctionController extends AuctionBaseController
 		$biditem = $this->Biditems->newEntity();
 		// POST送信時の処理
 		if ($this->request->is('post')) {
-			// 選択した画像名を変数に代入
 			$image = $this->request->getData(['image_path']);
 			$imagename = $image['name'];
 			// 画像の拡張子が適当か確認
@@ -101,8 +101,13 @@ class AuctionController extends AuctionBaseController
 				(strpos($str, '.PNG')!== false) ||
 				(strpos($str, '.GIF')!== false)
 				) {
-					//拡張子が適切なら画像をアップロード
-					$imagePath = 'img/auction/' . $imagename;
+					// 拡張子が適切なら画像を保存
+					// 画像名連番の最後の数（最大値）をDBから取得し、その次の数を画像に命名
+					$find = $this->Biditems->find()
+						->order(['id' => 'desc'])
+						->first();
+					$imageid = ($find['id'] + 1);
+					$imagePath = 'img/auction/' .$imageid . $imagename;
 					move_uploaded_file($image['tmp_name'], $imagePath);
 					// $biditemにフォームの送信内容を反映
 					$biditem = $this->Biditems->patchEntity($biditem, $this->request->getData());

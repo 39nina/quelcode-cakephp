@@ -86,24 +86,41 @@ class AuctionController extends AuctionBaseController
 		$biditem = $this->Biditems->newEntity();
 		// POST送信時の処理
 		if ($this->request->is('post')) {
-			// 画像を保存
+			// 選択した画像名を変数に代入
 			$image = $this->request->getData(['image_path']);
 			$imagename = $image['name'];
-			$imagePath = 'img/auction/' . $imagename;
-			move_uploaded_file($image['tmp_name'], $imagePath);
-			// $biditemにフォームの送信内容を反映
-			$biditem = $this->Biditems->patchEntity($biditem, $this->request->getData());
-			// $biditemのimage_pathを修正
-			$biditem['image_path'] = $imagePath;
-			// $biditemを保存する
-			if ($this->Biditems->save($biditem)) {
-				// 成功時のメッセージ
-				$this->Flash->success(__('保存しました。'));
-				// トップページ（index）に移動
-				return $this->redirect(['action' => 'index']);
+			// 画像の拡張子が適当か確認
+			$str = substr($imagename, -5);
+			if (
+				(strpos($str, '.jpg')!== false) ||
+				(strpos($str, '.jpeg')!== false) ||
+				(strpos($str, '.png')!== false) ||
+				(strpos($str, '.gif')!== false) ||
+				(strpos($str, '.JPG')!== false) ||
+				(strpos($str, '.JPEG')!== false) ||
+				(strpos($str, '.PNG')!== false) ||
+				(strpos($str, '.GIF')!== false)
+				) {
+					//拡張子が適切なら画像をアップロード
+					$imagePath = 'img/auction/' . $imagename;
+					move_uploaded_file($image['tmp_name'], $imagePath);
+					// $biditemにフォームの送信内容を反映
+					$biditem = $this->Biditems->patchEntity($biditem, $this->request->getData());
+					// $biditemのimage_pathを修正
+					$biditem['image_path'] = $imagePath;
+					// $biditemを保存する
+					if ($this->Biditems->save($biditem)) {
+						// 成功時のメッセージ
+						$this->Flash->success(__('保存しました。'));
+						// トップページ（index）に移動
+						return $this->redirect(['action' => 'index']);
+					}
+					// 失敗時のメッセージ
+					$this->Flash->error(__('保存に失敗しました。もう一度入力ください。'));
+				} else {
+					// 画像拡張子が適切でなかった時のメッセージ
+					$this->Flash->error(__('登録できないファイルです。jpg, jpeg, png, gif, JPG, JPEG, PNG, GIFのいずれかの形式の画像を登録してください。'));
 			}
-			// 失敗時のメッセージ
-			$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
 		}
 		// 値を保管
 		$this->set(compact('biditem'));

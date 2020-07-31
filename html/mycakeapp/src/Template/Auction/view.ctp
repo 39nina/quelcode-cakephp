@@ -36,7 +36,6 @@
 		var endtime = '<?php echo $endtime; ?>';
 		var now = '<?php echo $now; ?>';
 		var lefttime = endtime - now; //ページを開いた時の残り時間
-		var lefttime = 2;
 
 		function timeConversion() {
 			var days = Math.floor(lefttime / 60 / 60 / 24);

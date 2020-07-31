@@ -78,6 +78,12 @@ class AuctionController extends AuctionBaseController
 			'order'=>['price'=>'desc']])->toArray();
 		// オブジェクト類をテンプレート用に設定
 		$this->set(compact('biditem', 'bidrequests'));
+
+		//カウントダウンタイマー用にjsファイルに値を渡す
+			$endtime = strtotime($biditem->endtime);
+			$now = time();
+			$this->set(compact('endtime'));
+			$this->set(compact('now'));
 	}
 
 	// 出品する処理

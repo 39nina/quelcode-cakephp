@@ -17,7 +17,7 @@
 </tr>
 <tr>
 	<th scope="row">商品画像</th>
-	<td><img src="http://localhost:10080/<?php echo $biditem['image_path'] ?>" width="400px" height="400px"></td>
+	<td><img src="http://localhost:10080/<?php echo $biditem['image_path'] ?>" maxwidth="400px" maxheight="400px"></td>
 </tr>
 <tr>
 	<th scope="row">商品情報詳細</th>

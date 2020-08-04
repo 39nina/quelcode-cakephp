@@ -106,31 +106,31 @@ class AuctionController extends AuctionBaseController
 				(strpos($str, '.JPEG')!== false) ||
 				(strpos($str, '.PNG')!== false) ||
 				(strpos($str, '.GIF')!== false)
-				) {
-					// 拡張子が適切なら画像を保存
-					// 画像名連番の最後の数（最大値）をDBから取得し、その次の数を画像に命名
-					$find = $this->Biditems->find()
-						->order(['id' => 'desc'])
-						->first();
-					$imageid = ($find['id'] + 1);
-					$imagePath = 'img/auction/' .$imageid . $imagename;
-					move_uploaded_file($image['tmp_name'], $imagePath);
-					// $biditemにフォームの送信内容を反映
-					$biditem = $this->Biditems->patchEntity($biditem, $this->request->getData());
-					// $biditemのimage_pathを修正
-					$biditem['image_path'] = $imagePath;
-					// $biditemを保存する
-					if ($this->Biditems->save($biditem)) {
-						// 成功時のメッセージ
-						$this->Flash->success(__('保存しました。'));
-						// トップページ（index）に移動
-						return $this->redirect(['action' => 'index']);
-					}
-					// 失敗時のメッセージ
-					$this->Flash->error(__('保存に失敗しました。もう一度入力ください。'));
-				} else {
-					// 画像拡張子が適切でなかった時のメッセージ
-					$this->Flash->error(__('登録できないファイルです。jpg, jpeg, png, gif, JPG, JPEG, PNG, GIFのいずれかの形式の画像を登録してください。'));
+			) {
+				// 拡張子が適切なら画像を保存
+				// 画像名連番の最後の数（最大値）をDBから取得し、その次の数を画像に命名
+				$find = $this->Biditems->find()
+					->order(['id' => 'desc'])
+					->first();
+				$imageid = ($find['id'] + 1);
+				$imagePath = 'img/auction/' .$imageid . $imagename;
+				move_uploaded_file($image['tmp_name'], $imagePath);
+				// $biditemにフォームの送信内容を反映
+				$biditem = $this->Biditems->patchEntity($biditem, $this->request->getData());
+				// $biditemのimage_pathを修正
+				$biditem['image_path'] = $imagePath;
+				// $biditemを保存する
+				if ($this->Biditems->save($biditem)) {
+					// 成功時のメッセージ
+					$this->Flash->success(__('保存しました。'));
+					// トップページ（index）に移動
+					return $this->redirect(['action' => 'index']);
+				}
+				// 失敗時のメッセージ
+				$this->Flash->error(__('保存に失敗しました。もう一度入力ください。'));
+			} else {
+				// 画像拡張子が適切でなかった時のメッセージ
+				$this->Flash->error(__('登録できないファイルです。jpg, jpeg, png, gif, JPG, JPEG, PNG, GIFのいずれかの形式の画像を登録してください。'));
 			}
 		}
 		// 値を保管

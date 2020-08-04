@@ -113,7 +113,8 @@ class AuctionController extends AuctionBaseController
 					->order(['id' => 'desc'])
 					->first();
 				$imageid = ($find['id'] + 1);
-				$imagePath = 'img/auction/' .$imageid . $imagename;
+				$ext = pathinfo($imagename, PATHINFO_EXTENSION);
+				$imagePath = 'img/auction/' .$imageid . "." .$ext;
 				move_uploaded_file($image['tmp_name'], $imagePath);
 				// $biditemにフォームの送信内容を反映
 				$biditem = $this->Biditems->patchEntity($biditem, $this->request->getData());

@@ -1,3 +1,10 @@
+<script type="text/javascript">
+	var endtime = '<?php echo $endtime; ?>';
+	var now = '<?php echo $now; ?>';
+</script>
+
+<?php echo $this->Html->script('view'); ?>
+
 <h2>「<?= $biditem->name ?>」の情報</h2>
 <table class="vertical-table">
 <tr>
@@ -7,6 +14,14 @@
 <tr>
 	<th scope="row">商品名</th>
 	<td><?= h($biditem->name) ?></td>
+</tr>
+<tr>
+	<th scope="row">商品画像</th>
+	<td><img src="http://localhost:10080/<?php echo $biditem['image_path'] ?>" maxwidth="400px" maxheight="400px"></td>
+</tr>
+<tr>
+	<th scope="row">商品情報詳細</th>
+	<td><?= h($biditem->detail) ?></td>
 </tr>
 <tr>
 	<th scope="row">商品ID</th>
@@ -19,6 +34,10 @@
 <tr>
 	<th scope="row">投稿時間</th>
 	<td><?= h($biditem->created) ?></td>
+</tr>
+<tr>
+	<th scope="row">オークション残り時間</th>
+	<td><span id="timer"></span></td>
 </tr>
 <tr>
 	<th scope="row"><?= __('終了した？') ?></th>

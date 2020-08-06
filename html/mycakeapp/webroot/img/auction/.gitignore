@@ -1,0 +1,12 @@
+# 画像ファイルをgit管理対象外にする
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.JPG
+*.JPEG
+*.PNG
+*.GIF
+
+# gitkeepのみgit管理対象とする
+!.gitkeep

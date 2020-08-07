@@ -10,7 +10,7 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Contact[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class ContactsController extends AppController
+class ContactsController extends AuctionBaseController
 {
     /**
      * Index method

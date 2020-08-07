@@ -10,7 +10,7 @@ use App\Controller\AppController;
  *
  * @method \App\Model\Entity\Rating[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class RatingsController extends AppController
+class RatingsController extends AuctionBaseController
 {
     /**
      * Index method

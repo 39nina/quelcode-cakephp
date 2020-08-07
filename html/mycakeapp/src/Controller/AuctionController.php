@@ -84,6 +84,9 @@ class AuctionController extends AuctionBaseController
 			$now = time();
 			$this->set(compact('endtime'));
 			$this->set(compact('now'));
+
+		//ログイン者のidを$login_idとして設定
+		$this->set('login_id', $this->Auth->user('id'));
 	}
 
 	// 出品する処理

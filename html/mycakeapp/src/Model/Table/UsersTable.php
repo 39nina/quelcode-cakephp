@@ -51,6 +51,9 @@ class UsersTable extends Table
         $this->hasMany('Bidrequests', [
             'foreignKey' => 'user_id',
         ]);
+        $this->hasMany('Ratings', [
+            'foreignKey' => 'user_id',
+        ]);
     }
 
     /**

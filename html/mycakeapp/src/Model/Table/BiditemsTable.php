@@ -53,6 +53,12 @@ class BiditemsTable extends Table
         $this->hasMany('Bidrequests', [
             'foreignKey' => 'biditem_id',
         ]);
+        $this->hasOne('Contacts', [
+            'foreignKey' => 'biditem_id',
+        ]);
+        $this->hasMany('Ratings', [
+            'foreignKey' => 'biditem_id',
+        ]);
     }
 
     /**

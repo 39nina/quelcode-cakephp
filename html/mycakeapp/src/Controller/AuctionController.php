@@ -23,6 +23,8 @@ class AuctionController extends AuctionBaseController
 		$this->loadModel('Bidrequests');
 		$this->loadModel('Bidinfo');
 		$this->loadModel('Bidmessages');
+		$this->loadModel('Contacts');
+		$this->loadModel('Ratings');
 		// ログインしているユーザー情報をauthuserに設定
 		$this->set('authuser', $this->Auth->user());
 		// レイアウトをauctionに変更
@@ -224,10 +226,44 @@ class AuctionController extends AuctionBaseController
 	// 落札者とのメッセージ
 	public function contact($bidinfo_id = null)
 	{
+		// $bidinfo_idからBidinfoを取得する
+		try {
+			$bidinfo = $this->Bidinfo->get($bidinfo_id, ['contain'=>['Biditems']]);
+		} catch(Exception $e){
+			$bidinfo = null;
+		}
+
+		// 取引連絡開始用に落札者の発送先情報連絡フォームを用意
+		$contact = $this->Contacts->newEntity();
+		// $contact（落札者情報）がPOSTされた時の処理
+		if ($this->request->is('post') && !empty($this->request->getData('name'))) {
+			// 送信されたフォーム内容、オークションidで$contactを更新、落札者情報フラグに1をセット
+			$contact = $this->Contacts->patchEntity($contact, $this->request->getData());
+			$contact->biditem_id =  $bidinfo_id;
+			$contact->sent_info = 1;
+			// Contactを保存
+			if ($this->Contacts->save($contact)) {
+				$this->Flash->success(__('発送先情報を送信しました。'));
+				$this->set(compact('contact'));
+			} else {
+				$this->Flash->error(__('送信に失敗しました。もう一度入力下さい。'));
+			}
+		}
+
+		// このオークションの取引連絡レコードが作られているか、取引状況を確認するために$contactEntityを設定
+		$bidinfo_id = $bidinfo->id;
+		try {
+			$contactEntity = $this->Contacts->find('all',
+				 ['conditions'=>['biditem_id'=>$bidinfo_id]])->first();
+		} catch(Exception $e) {
+			$contactEntity = null;
+		}
+		$this->set(compact('contactEntity'));
+
 		// Bidmessageを新たに用意
 		$bidmsg = $this->Bidmessages->newEntity();
-		// POST送信時の処理
-		if ($this->request->is('post')) {
+		// $bidmsg（メッセージ）がPOSTされた時の処理
+		if ($this->request->is('post') && !empty($this->request->getData('message'))) {
 			// 送信されたフォームで$bidmsgを更新
 			$bidmsg = $this->Bidmessages->patchEntity($bidmsg, $this->request->getData());
 			// Bidmessageを保存
@@ -236,11 +272,6 @@ class AuctionController extends AuctionBaseController
 			} else {
 				$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
 			}
-		}
-		try { // $bidinfo_idからBidinfoを取得する
-			$bidinfo = $this->Bidinfo->get($bidinfo_id, ['contain'=>['Biditems']]);
-		} catch(Exception $e){
-			$bidinfo = null;
 		}
 		// Bidmessageをbidinfo_idとuser_idで検索
 		$bidmsgs = $this->Bidmessages->find('all',[

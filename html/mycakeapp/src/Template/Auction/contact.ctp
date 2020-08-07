@@ -1,7 +1,28 @@
 <?php if (!empty($bidinfo)): ?>
 <h2>商品「<?=$bidinfo->biditem->name ?>」</h2>
-<h3>※メッセージ情報</h3>
-<h6>※メッセージを送信する</h6>
+<?php if (empty($contactEntity)): ?>
+	<h3>【取引先連絡】</h3>
+	<?= $this->Form->create('',[
+	'enctype' => 'multipart/form-data',
+	'type' => 'post'
+	]) ?>
+	<fieldset>
+		<legend>落札者の連絡先を入力：</legend>
+		<?php
+			echo $this->Form->control('name');
+			echo $this->Form->control('address',[
+				'type' => 'textarea',
+				'maxlength' => 200
+			]);
+			echo $this->Form->control('phone_number');
+		?>
+	</fieldset>
+	<?= $this->Form->button(__('Submit')) ?>
+	<?= $this->Form->end() ?>
+<?php endif; ?>
+<?= '<br>' ?>
+<h3>【メッセージ】</h3>
+<h6>※ メッセージを送信する</h6>
 <?= $this->Form->create($bidmsg) ?>
 <?= $this->Form->hidden('bidinfo_id', ['value' => $bidinfo->id]) ?>
 <?= $this->Form->hidden('user_id', ['value' => $authuser['id']]) ?>

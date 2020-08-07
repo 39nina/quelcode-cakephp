@@ -217,4 +217,33 @@ class AuctionController extends AuctionBaseController
 			'limit' => 10])->toArray();
 		$this->set(compact('biditems'));
 	}
+
+	// 落札者とのメッセージ
+	public function contact($bidinfo_id = null)
+	{
+		// Bidmessageを新たに用意
+		$bidmsg = $this->Bidmessages->newEntity();
+		// POST送信時の処理
+		if ($this->request->is('post')) {
+			// 送信されたフォームで$bidmsgを更新
+			$bidmsg = $this->Bidmessages->patchEntity($bidmsg, $this->request->getData());
+			// Bidmessageを保存
+			if ($this->Bidmessages->save($bidmsg)) {
+				$this->Flash->success(__('保存しました。'));
+			} else {
+				$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+			}
+		}
+		try { // $bidinfo_idからBidinfoを取得する
+			$bidinfo = $this->Bidinfo->get($bidinfo_id, ['contain'=>['Biditems']]);
+		} catch(Exception $e){
+			$bidinfo = null;
+		}
+		// Bidmessageをbidinfo_idとuser_idで検索
+		$bidmsgs = $this->Bidmessages->find('all',[
+			'conditions'=>['bidinfo_id'=>$bidinfo_id],
+			'contain' => ['Users'],
+			'order'=>['created'=>'desc']]);
+		$this->set(compact('bidmsgs', 'bidinfo', 'bidmsg'));
+	}
 }

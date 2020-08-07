@@ -16,7 +16,7 @@
 		<td><?= h($info->biditem->name) ?></td>
 		<td><?= h($info->created) ?></td>
 		<td class="actions">
-			<?= $this->Html->link(__('View'), ['action' => 'msg', $info->id]) ?>
+			<?= $this->Html->link(__('View'), ['action' => 'contact', $info->id]) ?>
 		</td>
 	</tr>
 	<?php endforeach; ?>

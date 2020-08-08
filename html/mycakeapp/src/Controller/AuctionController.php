@@ -243,7 +243,7 @@ class AuctionController extends AuctionBaseController
 		$this->set(compact('bidder_id', 'exhibitor_id'));
 
 		// 取引連絡開始用に落札者の発送先情報連絡フォームを用意
-		// このオークションの取引連絡レコードが作られているか確認するために$contactEntityを設定
+		// このオークションの取引連絡レコードが作られている場合、$contactEntityを設定
 		$bidinfo_id = $bidinfo->id;
 		try {
 			$contactEntity = $this->Contacts->find('all',
@@ -270,6 +270,19 @@ class AuctionController extends AuctionBaseController
 				header('Location: ./' . $bidinfo_id);
 			} else {
 				$this->Flash->error(__('送信に失敗しました。もう一度入力下さい。'));
+			}
+		}
+
+		// 発送連絡がPOSTされた時の処理
+		if (!empty($this->request->getData('is_shipped'))) {
+			// 発送連絡フラグ（is_shipped）に1をセット
+			$contactEntity->is_shipped = 1;
+			// Contactを保存
+			if ($this->Contacts->save($contactEntity)) {
+				//重複送信防止
+				header('Location: ./' . $bidinfo_id);
+			} else {
+				$this->Flash->error(__('送信に失敗しました。もう一度押して下さい。'));
 			}
 		}
 

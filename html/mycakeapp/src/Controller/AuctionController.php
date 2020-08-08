@@ -233,24 +233,17 @@ class AuctionController extends AuctionBaseController
 			$bidinfo = null;
 		}
 
-		// 取引連絡開始用に落札者の発送先情報連絡フォームを用意
-		$contact = $this->Contacts->newEntity();
-		// $contact（落札者情報）がPOSTされた時の処理
-		if ($this->request->is('post') && !empty($this->request->getData('name'))) {
-			// 送信されたフォーム内容、オークションidで$contactを更新、落札者情報フラグに1をセット
-			$contact = $this->Contacts->patchEntity($contact, $this->request->getData());
-			$contact->biditem_id =  $bidinfo_id;
-			$contact->sent_info = 1;
-			// Contactを保存
-			if ($this->Contacts->save($contact)) {
-				$this->Flash->success(__('発送先情報を送信しました。'));
-				$this->set(compact('contact'));
-			} else {
-				$this->Flash->error(__('送信に失敗しました。もう一度入力下さい。'));
-			}
-		}
+		// 落札者idと出品者idを用意
+		$bidder = $this->Bidrequests->find('all', [
+			'conditions'=>['biditem_id'=>($bidinfo->biditem_id)],
+			'contain' => ['Users'],
+			'order'=>['price'=>'desc']])->first();
+		$bidder_id = $bidder->user_id;
+		$exhibitor_id = $bidinfo->user_id;
+		$this->set(compact('bidder_id', 'exhibitor_id'));
 
-		// このオークションの取引連絡レコードが作られているか、取引状況を確認するために$contactEntityを設定
+		// 取引連絡開始用に落札者の発送先情報連絡フォームを用意
+		// このオークションの取引連絡レコードが作られているか確認するために$contactEntityを設定
 		$bidinfo_id = $bidinfo->id;
 		try {
 			$contactEntity = $this->Contacts->find('all',
@@ -259,6 +252,26 @@ class AuctionController extends AuctionBaseController
 			$contactEntity = null;
 		}
 		$this->set(compact('contactEntity'));
+
+		$contact = $this->Contacts->newEntity();
+		// $contact（落札者情報）がPOSTされた時の処理
+		if (!empty($this->request->getData('name'))) {
+			// 送信されたフォーム内容、オークションidで$contactを更新、落札者情報フラグに1をセット
+			$contact = $this->Contacts->patchEntity($contact, $this->request->getData());
+			$contact->biditem_id =  $bidinfo_id;
+			$contact->sent_info = 1;
+			// Contactを保存
+			if ($this->Contacts->save($contact)) {
+				// 送信できたら、連絡先情報フォームを表示させないようにするため、$contactEntityに内容をセット
+				$contactEntity = $this->Contacts->find('all',
+				['conditions'=>['biditem_id'=>$bidinfo_id]])->first();
+				$this->set(compact('contactEntity'));
+				//重複送信防止
+				header('Location: ./' . $bidinfo_id);
+			} else {
+				$this->Flash->error(__('送信に失敗しました。もう一度入力下さい。'));
+			}
+		}
 
 		// Bidmessageを新たに用意
 		$bidmsg = $this->Bidmessages->newEntity();

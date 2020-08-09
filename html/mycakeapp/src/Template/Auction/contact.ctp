@@ -105,6 +105,10 @@
 			<?= $this->Form->button(__('評価をする')) ?>
 			<?= $this->Form->end() ?>
 		<?php endif; ?>
+		<!-- ログイン者が落札者か出品者で、両者の評価が完了した場合のみ表示 -->
+		<?php if ($contactEntity['is_rated_by_exhibitor'] ===  true): ?>
+		<p>※ 取引が完了しました。</p>
+		<?php endif; ?>
 		<br>
 	<?php endif; ?>
 

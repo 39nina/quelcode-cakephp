@@ -282,6 +282,35 @@ class AuctionController extends AuctionBaseController
 			}
 		}
 
+
+		// ここから下は後ほど別コントローラーに移動する
+
+		// 出品者から受け取り評価連絡がPOSTされた場合
+		if (!empty($this->request->getData('rate'))) {
+			// ratingsテーブルに新レコードを作成する
+			$rating = $this->Ratings->newEntity();
+			// 送信された内容でエンティティを更新、追加情報を$ratingにセット
+			$rating = $this->Ratings->patchEntity($rating, $this->request->getData());
+			$rating->biditem_id = $bidinfo['biditem_id'];
+			$rating->rater_id = $bidder_id;
+			$rating->rate_target_id = $exhibitor_id;
+			$rating->rate = $this->request->getData('rate');
+			$rating->comment = $this->request->getData('comment');
+			$this->set(compact('rating'));
+			// 落札者からの評価フラグに1をセット
+			$contactEntity->is_rated_by_bidder = 1;
+			// $Ratingを保存
+			if ($this->Ratings->save($rating) && $this->Contacts->save($contactEntity)) {
+				//重複送信防止
+				header('Location: ./' . $bidinfo_id);
+			} else {
+				$this->Flash->error(__('送信に失敗しました。'));
+			}
+		}
+
+		// 移動するのここまで！
+
+
 		// Bidmessageを新たに用意
 		$bidmsg = $this->Bidmessages->newEntity();
 		// $bidmsg（メッセージ）がPOSTされた時の処理

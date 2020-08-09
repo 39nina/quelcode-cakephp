@@ -234,12 +234,8 @@ class AuctionController extends AuctionBaseController
 		}
 
 		// 落札者idと出品者idを用意
-		$bidder = $this->Bidrequests->find('all', [
-			'conditions'=>['biditem_id'=>($bidinfo->biditem_id)],
-			'contain' => ['Users'],
-			'order'=>['price'=>'desc']])->first();
-		$bidder_id = $bidder->user_id;
-		$exhibitor_id = $bidinfo->user_id;
+		$bidder_id = $bidinfo->user_id;
+		$exhibitor_id = $bidinfo->biditem->user_id;
 		$this->set(compact('bidder_id', 'exhibitor_id'));
 
 		// 取引連絡開始用に落札者の発送先情報連絡フォームを用意

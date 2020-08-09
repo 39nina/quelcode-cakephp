@@ -1,4 +1,4 @@
-<?php if (!empty($bidinfo)): ?>
+<?php if (!empty($bidinfo) && ($exhibitor_id === $authuser['id'] || $bidder_id === $authuser['id'])): ?>
 	<h2>商品「<?=$bidinfo->biditem->name ?>」</h2>
 	<!-- 落札者から取引先情報が送信される前 -->
 	<?php if (empty($contactEntity)): ?>

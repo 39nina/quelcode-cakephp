@@ -77,12 +77,33 @@
 		<?php endif; ?>
 	<?php endif; ?>
 
-	<!-- 配送状況(落札者の受取通知後) -->
-	<?php if ($contactEntity['is_rated_by_bidder'] ===  true): ?>
+	<!-- 配送状況 -->
+	<?php if ($contactEntity['is_rated_by_bidder'] ===  true ): ?>
 		<h3>【取引状況】</h3>
-		<!-- ログイン者が落札者の場合のみ表示 -->
-		<?php if ($bidder_id === $authuser['id']): ?>
+		<!-- ログイン者が落札者で、落札者のみ評価終了している場合のみ表示 -->
+		<?php if ($contactEntity['is_rated_by_exhibitor'] ===  false && $bidder_id === $authuser['id']): ?>
 			<p>※ 受取評価が完了しました。出品者からの評価をお待ちください。</p>
+		<?php endif; ?>
+		<!-- ログイン者が出品者で、落札者のみ評価終了している場合のみ表示 -->
+		<?php if ($contactEntity['is_rated_by_exhibitor'] ===  false && $exhibitor_id === $authuser['id']): ?>
+			<p>※ 落札者が商品を受け取りました。落札者の評価をしてください。</p>
+			<?= $this->Form->create('',[
+			'enctype' => 'multipart/form-data',
+			'type' => 'post'
+			]) ?>
+			<fieldset>
+				<legend>落札者の取引評価を入力：</legend>
+				<?php
+					echo 'rate';
+					echo $this->Form->select('rate2',[1=>'1（とても悪い）', 2=>'2（悪い）', 3=>'3（普通）', 4=>'4（良い）', 5=>'5（とても良い）'],['default'=>3]);
+					echo $this->Form->control('comment',[
+						'type' => 'textarea',
+						'maxlength' => 200
+					]);
+				?>
+			</fieldset>
+			<?= $this->Form->button(__('評価をする')) ?>
+			<?= $this->Form->end() ?>
 		<?php endif; ?>
 		<br>
 	<?php endif; ?>

@@ -285,8 +285,9 @@ class AuctionController extends AuctionBaseController
 
 		// ここから下は後ほど別コントローラーに移動する
 
-		// 出品者から受け取り評価連絡がPOSTされた場合
+		// 落札者から受け取り評価連絡がPOSTされた場合
 		if (!empty($this->request->getData('rate'))) {
+
 			// ratingsテーブルに新レコードを作成する
 			$rating = $this->Ratings->newEntity();
 			// 送信された内容でエンティティを更新、追加情報を$ratingにセット
@@ -296,11 +297,32 @@ class AuctionController extends AuctionBaseController
 			$rating->rate_target_id = $exhibitor_id;
 			$rating->rate = $this->request->getData('rate');
 			$rating->comment = $this->request->getData('comment');
-			$this->set(compact('rating'));
 			// 落札者からの評価フラグに1をセット
 			$contactEntity->is_rated_by_bidder = 1;
 			// $Ratingを保存
 			if ($this->Ratings->save($rating) && $this->Contacts->save($contactEntity)) {
+				//重複送信防止
+				header('Location: ./' . $bidinfo_id);
+			} else {
+				$this->Flash->error(__('送信に失敗しました。'));
+			}
+		}
+
+		// 出品者から受け取り評価連絡がPOSTされた場合
+		if (!empty($this->request->getData('rate2'))) {
+			// ratingsテーブルに新レコードを作成する
+			$rating2 = $this->Ratings->newEntity();
+			// 送信された内容でエンティティを更新、追加情報を$ratingにセット
+			$rating2 = $this->Ratings->patchEntity($rating2, $this->request->getData());
+			$rating2->biditem_id = $bidinfo['biditem_id'];
+			$rating2->rater_id = $exhibitor_id;
+			$rating2->rate_target_id = $bidder_id;
+			$rating2->rate = $this->request->getData('rate2');
+			$rating2->comment = $this->request->getData('comment');
+			// 落札者からの評価フラグに1をセット
+			$contactEntity->is_rated_by_exhibitor = 1;
+			// $Ratingを保存
+			if ($this->Ratings->save($rating2) && $this->Contacts->save($contactEntity)) {
 				//重複送信防止
 				header('Location: ./' . $bidinfo_id);
 			} else {

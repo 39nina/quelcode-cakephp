@@ -1,57 +1,69 @@
 <?php if (!empty($bidinfo)): ?>
 	<h2>商品「<?=$bidinfo->biditem->name ?>」</h2>
-	<!-- ログイン者が落札者の場合のみ表示 -->
-	<?php if (empty($contactEntity) && $bidder_id === $authuser['id']): ?>
+	<!-- 落札者から取引先情報が送信される前 -->
+	<?php if (empty($contactEntity)): ?>
 		<h3>【取引先連絡】</h3>
-		<?= $this->Form->create('',[
-		'enctype' => 'multipart/form-data',
-		'type' => 'post'
-		]) ?>
-		<fieldset>
-			<legend>落札者の連絡先を入力：</legend>
-			<?php
-				echo $this->Form->control('name');
-				echo $this->Form->control('address',[
-					'type' => 'textarea',
-					'maxlength' => 200
-				]);
-				echo $this->Form->control('phone_number');
-			?>
-		</fieldset>
-		<?= $this->Form->button(__('Submit')) ?>
-		<?= $this->Form->end() ?>
-		<?= '<br>' ?>
+		<!-- ログイン者が出品者の場合のみ表示 -->
+		<?php if ($exhibitor_id === $authuser['id']): ?>
+			<p>※ 落札者からの連絡をお待ちください。</p>
+			<br>
+		<?php endif; ?>
+		<!-- ログイン者が落札者の場合のみ表示 -->
+		<?php if ($bidder_id === $authuser['id']): ?>
+			<?= $this->Form->create('',[
+			'enctype' => 'multipart/form-data',
+			'type' => 'post'
+			]) ?>
+			<fieldset>
+				<legend>落札者の連絡先を入力：</legend>
+				<?php
+					echo $this->Form->control('name');
+					echo $this->Form->control('address',[
+						'type' => 'textarea',
+						'maxlength' => 200
+					]);
+					echo $this->Form->control('phone_number');
+				?>
+			</fieldset>
+			<?= $this->Form->button(__('Submit')) ?>
+			<?= $this->Form->end() ?>
+			<?= '<br>' ?>
+		<?php endif; ?>
 	<?php endif; ?>
 
-	<!-- ログイン者が出品者の場合のみ表示 -->
-	<?php if (empty($contactEntity) && $bidder_id !== $authuser['id']): ?>
-		<h3>【取引先連絡】</h3>
-		<p>※ 落札者からの連絡をお待ちください。</p>
-	<?php endif; ?>
-
-	<!-- ログイン者が出品者の場合のみ表示 -->
-	<?php if ($contactEntity['sent_info'] === true && $contactEntity['is_shipped'] === false && $bidder_id !== $authuser['id']): ?>
-		<h3>【発送連絡】</h3>
-		<p>※ 発送が完了したら、ボタンをおしてください。</p>
-		<?= $this->Form->create(null) ?>
-		<?= $this->Form->hidden('is_shipped', ['value' => 1]) ?>
-		<?= $this->Form->button(__('発送しました')) ?>
-		<?= $this->Form->end() ?>
-		<br><br>
-	<?php endif; ?>
-	<?php if ($contactEntity['is_shipped'] === true && $contactEntity['is_rated_by_bidder'] === false && $bidder_id !== $authuser['id']): ?>
+	<!-- 配送状況 -->
+	<?php if ($contactEntity['sent_info'] === true): ?>
 		<h3>【発送状況】</h3>
-		<p>※ 発送が完了しました。落札者からの受取評価をお待ちください。</p>
-		<?= '<br>' ?>
+		<!-- ログイン者が出品者で発送前の場合のみ表示 -->
+		<?php if ($contactEntity['is_shipped'] === false && $exhibitor_id === $authuser['id']): ?>
+			<p>※ 発送先情報が通知されました。発送が完了したら、ボタンをおしてください。</p>
+			<?= $this->Form->create(null) ?>
+			<?= $this->Form->hidden('is_shipped', ['value' => 1]) ?>
+			<?= $this->Form->button(__('発送が完了しました')) ?>
+			<?= $this->Form->end() ?>
+			<br><br>
+		<?php endif; ?>
+		<!-- ログイン者が落札者で発送前の場合のみ表示 -->
+		<?php if ($contactEntity['is_shipped'] === false && $bidder_id === $authuser['id']): ?>
+			<p>※ 出品者からの発送連絡をお待ちください。</p>
+			<?= '<br>' ?>
+		<?php endif; ?>
+		<!-- ログイン者が出品者で発送後の場合のみ表示 -->
+		<?php if ($contactEntity['is_shipped'] === true && $contactEntity['is_rated_by_bidder'] === false && $exhibitor_id === $authuser['id']): ?>
+			<p>※ 発送が完了しました。落札者からの受取評価をお待ちください。</p>
+			<?= '<br>' ?>
+		<?php endif; ?>
+		<!-- ログイン者が落札者で発送後の場合のみ表示 -->
+		<?php if ($contactEntity['is_shipped'] === true && $contactEntity['is_rated_by_bidder'] === false && $bidder_id === $authuser['id']): ?>
+			<p>※ 商品が発送されました。受取評価をしてください。</p>
+			<?= '<br>' ?>
+		<?php endif; ?>
 	<?php endif; ?>
 
+	<!-- 発送先情報が送信された後の表示 -->
 	<!-- ログイン者が落札者・出品者どちらの場合も表示 -->
 	<?php if (!empty($contactEntity)): ?>
 		<h3>【発送先情報】</h3>
-		<!-- ログイン者が落札者の場合のみ表示 -->
-		<?php if($bidder_id === $authuser['id']): ?>
-		<h6> ※ 出品者からの発送連絡をお待ちください。</h6>
-		<?php endif; ?>
 		<table cellpadding="0" cellspacing="0">
 	<thead>
 		<tr>
@@ -105,4 +117,3 @@
 <?php else: ?>
 <h2>※落札情報はありません。</h2>
 <?php endif; ?>
-

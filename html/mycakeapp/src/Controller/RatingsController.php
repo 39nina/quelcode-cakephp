@@ -35,6 +35,7 @@ class RatingsController extends AuctionBaseController
             ->where(['rate_target_id'=>$authuser_id])
             ->contain(['Biditems', 'Users'])
             ->order(['Ratings.id'=>'desc']);
+        $this->paginate = ['limit' => 10];
         $reviews = $this->paginate($reviews);
         $this->set(compact('reviews','authuser_id'));
 

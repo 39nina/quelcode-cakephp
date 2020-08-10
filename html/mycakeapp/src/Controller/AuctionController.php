@@ -298,7 +298,8 @@ class AuctionController extends AuctionBaseController
 			$bidmsg = $this->Bidmessages->patchEntity($bidmsg, $this->request->getData());
 			// Bidmessageを保存
 			if ($this->Bidmessages->save($bidmsg)) {
-				$this->Flash->success(__('保存しました。'));
+				//重複送信防止
+				header('Location: ./' . $bidinfo_id);
 			} else {
 				$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
 			}

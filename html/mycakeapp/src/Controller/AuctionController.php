@@ -240,10 +240,11 @@ class AuctionController extends AuctionBaseController
 
 		// 取引連絡開始用に落札者の発送先情報連絡フォームを用意
 		// このオークションの取引連絡レコードが作られている場合、$contactEntityを設定
+		$biditem_id = $bidinfo->biditem_id;
 		$bidinfo_id = $bidinfo->id;
 		try {
 			$contactEntity = $this->Contacts->find('all',
-				 ['conditions'=>['biditem_id'=>$bidinfo_id]])->first();
+				 ['conditions'=>['biditem_id'=>$biditem_id]])->first();
 		} catch(Exception $e) {
 			$contactEntity = null;
 		}
@@ -254,13 +255,13 @@ class AuctionController extends AuctionBaseController
 		if (!empty($this->request->getData('name'))) {
 			// 送信されたフォーム内容、オークションidで$contactを更新、落札者情報フラグに1をセット
 			$contact = $this->Contacts->patchEntity($contact, $this->request->getData());
-			$contact->biditem_id =  $bidinfo_id;
+			$contact->biditem_id =  $bidinfo->biditem_id;
 			$contact->sent_info = 1;
 			// Contactを保存
 			if ($this->Contacts->save($contact)) {
 				// 送信できたら、連絡先情報フォームを表示させないようにするため、$contactEntityに内容をセット
 				$contactEntity = $this->Contacts->find('all',
-				['conditions'=>['biditem_id'=>$bidinfo_id]])->first();
+				['conditions'=>['biditem_id'=>$biditem_id]])->first();
 				$this->set(compact('contactEntity'));
 				//重複送信防止
 				header('Location: ./' . $bidinfo_id);
@@ -282,6 +283,14 @@ class AuctionController extends AuctionBaseController
 			}
 		}
 
+		// if ($contactEntity['is_shipped'] === true) {
+		// 	$id = $this->Contact->get($id);
+		// 	print $id;
+		// 	exit();
+		// 	return $this->redirect(
+		// 		['controller' => 'Ratings', 'action' => 'rating', $id]
+		// 	);
+		// }
 
 		// ここから下は後ほど別コントローラーに移動する
 

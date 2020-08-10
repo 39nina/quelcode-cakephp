@@ -3,17 +3,17 @@
 <table cellpadding="0" cellspacing="0">
 <thead>
 	<tr>
-		<th style="width:13%"><?= $this->Paginator->sort('商品名') ?></th>
+		<th style="width:15%"><?= $this->Paginator->sort('商品名') ?></th>
 		<th style="width:10%"><?= $this->Paginator->sort('取引相手') ?></th>
 		<th style="width:8%"><?= $this->Paginator->sort('評価') ?></th>
-        <th class="main"><?= $this->Paginator->sort('コメント') ?></th>
-        <th style="width:24%"><?= $this->Paginator->sort('評価日時') ?></th>
+        <th style="width:45%"><?= $this->Paginator->sort('コメント') ?></th>
+        <th style="width:22%"><?= $this->Paginator->sort('評価日時') ?></th>
 	</tr>
 </thead>
 <tbody>
 	<?php foreach ($reviews as $review): ?>
 	<tr>
-		<td><?= h($review->biditem->name) ?></td>
+		<td><?= $this->Html->link(h($review->biditem->name), '/auction/view/' . h($review->biditem_id)) ?></td>
         <td><?= h($review->user->username) ?></td>
         <td><?= h($review->rate) ?></td>
         <td><?= h($review->comment) ?></td>

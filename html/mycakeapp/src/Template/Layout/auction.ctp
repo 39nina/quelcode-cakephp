@@ -37,10 +37,10 @@
 			<ul class="side-nav">
 				<li class="heading"><?= __('Actions') ?></li>
 				<li><?= $this->Html->link(__('あなたの評価'), ['action' => '../Ratings/index']) ?></li>
-				<li><?= $this->Html->link(__('あなたの落札情報'), ['action' => 'home']) ?></li>
-				<li><?= $this->Html->link(__('あなたの出品情報'), ['action' => 'home2']) ?></li>
-				<li><?= $this->Html->link(__('商品を出品する'), ['action' => 'add']) ?></li>
-				<li><?= $this->Html->link(__('商品リストを見る'), ['action' => 'index']) ?></li>
+				<li><?= $this->Html->link(__('あなたの落札情報'), ['action' => '../Auction/home']) ?></li>
+				<li><?= $this->Html->link(__('あなたの出品情報'), ['action' => '../Auction/home2']) ?></li>
+				<li><?= $this->Html->link(__('商品を出品する'), ['action' => '../Auction/add']) ?></li>
+				<li><?= $this->Html->link(__('商品リストを見る'), ['action' => '../Auction/index']) ?></li>
 			</ul>
 		</nav>
 	</div>

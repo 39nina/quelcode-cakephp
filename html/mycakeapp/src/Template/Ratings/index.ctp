@@ -3,11 +3,11 @@
 <table cellpadding="0" cellspacing="0">
 <thead>
 	<tr>
-		<th style="width:15%"><?= $this->Paginator->sort('商品名') ?></th>
-		<th style="width:10%"><?= $this->Paginator->sort('取引相手') ?></th>
-		<th style="width:8%"><?= $this->Paginator->sort('評価') ?></th>
-        <th style="width:45%"><?= $this->Paginator->sort('コメント') ?></th>
-        <th style="width:22%"><?= $this->Paginator->sort('評価日時') ?></th>
+		<th scope="col"><?= $this->Paginator->sort('name') ?></th>
+		<th scope="col"><?= $this->Paginator->sort('rater') ?></th>
+		<th scope="col"><?= $this->Paginator->sort('rating') ?></th>
+        <th class="main" scope="col"><?= $this->Paginator->sort('comment') ?></th>
+        <th scope="col"><?= $this->Paginator->sort('created') ?></th>
 	</tr>
 </thead>
 <tbody>
@@ -17,7 +17,7 @@
         <td><?= h($review->user->username) ?></td>
         <td><?= h($review->rate) ?></td>
         <td><?= h($review->comment) ?></td>
-        <td><?= date('Y年n月j日 H時i分', strtotime($review->created)) ?></td>
+        <td><?= date('Y/n/j H:i', strtotime(h($review->created))) ?></td>
 	</tr>
 	<?php endforeach; ?>
 </tbody>

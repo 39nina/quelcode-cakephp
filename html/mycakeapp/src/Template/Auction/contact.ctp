@@ -48,33 +48,6 @@
 			<p>※ 出品者からの発送連絡をお待ちください。</p>
 			<?= '<br>' ?>
 		<?php endif; ?>
-		<!-- ログイン者が出品者で発送後の場合のみ表示 -->
-		<?php if ($contactEntity['is_shipped'] === true && $contactEntity['is_rated_by_bidder'] === false && $exhibitor_id === $authuser['id']): ?>
-			<p>※ 発送が完了しました。落札者からの受取評価をお待ちください。</p>
-			<?= '<br>' ?>
-		<?php endif; ?>
-		<!-- ログイン者が落札者で発送後の場合のみ表示 -->
-		<?php if ($contactEntity['is_shipped'] === true && $contactEntity['is_rated_by_bidder'] === false && $bidder_id === $authuser['id']): ?>
-			<p>※ 商品が発送されました。受け取った後に取引評価をしてください。</p>
-			<?= $this->Form->create('',[
-			'enctype' => 'multipart/form-data',
-			'type' => 'post'
-			]) ?>
-			<fieldset>
-				<legend>出品者の取引評価を入力：</legend>
-				<?php
-					echo 'rate';
-					echo $this->Form->select('rate',[1=>'1（とても悪い）', 2=>'2（悪い）', 3=>'3（普通）', 4=>'4（良い）', 5=>'5（とても良い）'],['default'=>3]);
-					echo $this->Form->control('comment',[
-						'type' => 'textarea',
-						'maxlength' => 200
-					]);
-				?>
-			</fieldset>
-			<?= $this->Form->button(__('商品を受け取りました')) ?>
-			<?= $this->Form->end() ?>
-			<?= '<br><br>' ?>
-		<?php endif; ?>
 	<?php endif; ?>
 
 	<!-- 発送先情報が送信された後の表示 -->

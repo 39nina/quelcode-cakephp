@@ -1,4 +1,4 @@
-<h2 style="margin: 20px 0px;"><?= $authuser['username'] ?>さんの評価：<?=$avg ?></h2>
+<h2><?= $authuser['username'] ?>さんの評価：<?=$avg ?></h2>
 <h4>評価一覧</h4>
 <table cellpadding="0" cellspacing="0">
 <thead>

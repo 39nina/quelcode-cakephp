@@ -39,10 +39,8 @@ class RatingsController extends AuctionBaseController
         $reviews = $this->paginate($reviews);
         $this->set(compact('reviews','authuser_id'));
 
-        //平均評価を設定
-        $all_rate = $this->Ratings->find()
-            ->where(['rate_target_id'=>$authuser_id]);
-        $avg = round(collection($all_rate)->avg('rate'), 1);
+		//平均評価を設定
+        $avg = round(collection($reviews)->avg('rate'), 1);
         $this->set(compact('avg'));
     }
 

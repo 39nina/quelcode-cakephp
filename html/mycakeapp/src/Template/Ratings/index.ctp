@@ -3,7 +3,6 @@
 <table cellpadding="0" cellspacing="0">
 <thead>
 	<tr>
-		<th scope="col"><?= $this->Paginator->sort('name') ?></th>
 		<th scope="col"><?= $this->Paginator->sort('rater') ?></th>
 		<th scope="col"><?= $this->Paginator->sort('rating') ?></th>
         <th class="main" scope="col"><?= $this->Paginator->sort('comment') ?></th>
@@ -13,7 +12,6 @@
 <tbody>
 	<?php foreach ($reviews as $review): ?>
 	<tr>
-		<td><?= $this->Html->link(h($review->biditem->name), '/auction/view/' . h($review->biditem_id)) ?></td>
         <td><?= h($review->user->username) ?></td>
         <td><?= h($review->rate) ?></td>
         <td><?= h($review->comment) ?></td>

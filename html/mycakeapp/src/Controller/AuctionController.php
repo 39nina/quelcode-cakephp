@@ -283,6 +283,7 @@ class AuctionController extends AuctionBaseController
 			}
 		}
 
+		// 出品者が発送完了している場合、評価機能用のRatingsコントローラーに遷移
 		if ($contactEntity['is_shipped'] === true) {
 			$id = $bidinfo['id'];
 			return $this->redirect(

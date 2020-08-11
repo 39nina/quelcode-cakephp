@@ -38,7 +38,6 @@
 		<?php if ($contactEntity['is_shipped'] === false && $exhibitor_id === $authuser['id']): ?>
 			<p>※ 発送先情報が通知されました。発送が完了したら、ボタンをおしてください。</p>
 			<?= $this->Form->create(null) ?>
-			<?= $this->Form->hidden('is_shipped', ['value' => 1]) ?>
 			<?= $this->Form->button(__('発送が完了しました')) ?>
 			<?= $this->Form->end() ?>
 			<br><br>

@@ -73,22 +73,21 @@
 	<?php if (!empty($contactEntity)): ?>
 		<h3>【発送先情報】</h3>
 		<table cellpadding="0" cellspacing="0">
-	<thead>
-		<tr>
-			<th scope="col">名前</th>
-			<th class="main" scope="col">住所</th>
-			<th scope="col">電話番号</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td><?= h($contactEntity->name) ?></td>
-			<td><?= h($contactEntity->address) ?></td>
-			<td><?= h($contactEntity->phone_number) ?></td>
-		</tr>
-	</tbody>
-	</table>
-	<?= '<br><br>' ?>
+		<thead>
+			<tr>
+				<th scope="col">名前</th>
+				<th class="main" scope="col">住所</th>
+				<th scope="col">電話番号</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><?= h($contactEntity->name) ?></td>
+				<td><?= h($contactEntity->address) ?></td>
+				<td><?= h($contactEntity->phone_number) ?></td>
+			</tr>
+		</tbody>
+		</table>
 	<?php endif; ?>
 
 	<!-- 常に表示 -->

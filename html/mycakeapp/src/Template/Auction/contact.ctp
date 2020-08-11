@@ -102,5 +102,5 @@
 	</tbody>
 	</table>
 <?php else: ?>
-<h2>※落札情報はありません。</h2>
+<?php header('Location: ./'); ?>
 <?php endif; ?>

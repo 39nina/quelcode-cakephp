@@ -230,7 +230,9 @@ class AuctionController extends AuctionBaseController
 		try {
 			$bidinfo = $this->Bidinfo->get($bidinfo_id, ['contain'=>['Biditems']]);
 		} catch(Exception $e){
-			$bidinfo = null;
+			return $this->redirect(
+				['controller' => 'Auction', 'action' => 'index']
+			);
 		}
 
 		// 落札者idと出品者idを用意

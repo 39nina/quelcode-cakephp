@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Exception;
 
 class RatingsController extends AuctionBaseController
 {
@@ -50,7 +51,9 @@ class RatingsController extends AuctionBaseController
 		try {
 			$bidinfo = $this->Bidinfo->get($bidinfo_id, ['contain'=>['Biditems']]);
 		} catch(Exception $e){
-			$bidinfo = null;
+			return $this->redirect(
+				['controller' => 'Auction', 'action' => 'index']
+			);
 		}
 		$bidinfo_id = $bidinfo->id;
 

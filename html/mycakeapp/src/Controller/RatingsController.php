@@ -27,7 +27,7 @@ class RatingsController extends AuctionBaseController
 		$this->viewBuilder()->setLayout('auction');
     }
 
-    public function index()
+    public function rating()
     {
         // 評価一覧への表示内容を設定
         $authuser_id = $this->Auth->user()['id'];
@@ -44,7 +44,7 @@ class RatingsController extends AuctionBaseController
         $this->set(compact('avg'));
     }
 
-	public function rating($bidinfo_id = null)
+	public function contact($bidinfo_id = null)
 	{
 		// $bidinfo_idからBidinfoを取得する
 		try {

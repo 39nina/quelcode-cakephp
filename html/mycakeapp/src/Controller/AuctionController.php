@@ -287,7 +287,7 @@ class AuctionController extends AuctionBaseController
 		if ($contactEntity['is_shipped'] === true) {
 			$id = $bidinfo['id'];
 			return $this->redirect(
-				['controller' => 'Ratings', 'action' => 'rating', $id]
+				['controller' => 'Ratings', 'action' => 'contact', $id]
 			);
 		}
 

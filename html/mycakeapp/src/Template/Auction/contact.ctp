@@ -5,8 +5,7 @@
 		<h3>【取引先連絡】</h3>
 		<!-- ログイン者が出品者の場合のみ表示 -->
 		<?php if ($exhibitor_id === $authuser['id']): ?>
-			<p>※ 落札者からの連絡をお待ちください。</p>
-			<br>
+			<p style="margin-bottom: 3.5em">※ 落札者からの連絡をお待ちください。</p>
 		<?php endif; ?>
 		<!-- ログイン者が落札者の場合のみ表示 -->
 		<?php if ($bidder_id === $authuser['id']): ?>
@@ -27,25 +26,25 @@
 			</fieldset>
 			<?= $this->Form->button(__('Submit')) ?>
 			<?= $this->Form->end() ?>
-			<?= '<br>' ?>
+			<p  style="margin-bottom: 2.5em"></p>
 		<?php endif; ?>
 	<?php endif; ?>
 
-	<!-- 配送状況 -->
+	<!-- 発送状況 -->
 	<?php if ($contactEntity['sent_info'] === true && $contactEntity['is_rated_by_bidder'] ===  false): ?>
 		<h3>【発送状況】</h3>
 		<!-- ログイン者が出品者で発送前の場合のみ表示 -->
 		<?php if ($contactEntity['is_shipped'] === false && $exhibitor_id === $authuser['id']): ?>
 			<p>※ 発送先情報が通知されました。発送が完了したら、ボタンをおしてください。</p>
 			<?= $this->Form->create(null) ?>
+			<?= $this->Form->hidden('is_shipped', ['value' => '1']) ?>
 			<?= $this->Form->button(__('発送が完了しました')) ?>
 			<?= $this->Form->end() ?>
-			<br><br>
+			<p style="margin-bottom: 2.5em"></p>
 		<?php endif; ?>
 		<!-- ログイン者が落札者で発送前の場合のみ表示 -->
 		<?php if ($contactEntity['is_shipped'] === false && $bidder_id === $authuser['id']): ?>
-			<p>※ 出品者からの発送連絡をお待ちください。</p>
-			<?= '<br>' ?>
+			<p style="margin-bottom: 3.5em">※ 出品者からの発送連絡をお待ちください。</p>
 		<?php endif; ?>
 	<?php endif; ?>
 
@@ -53,7 +52,7 @@
 	<!-- ログイン者が落札者・出品者どちらの場合も表示 -->
 	<?php if (!empty($contactEntity)): ?>
 		<h3>【発送先情報】</h3>
-		<table cellpadding="0" cellspacing="0">
+		<table cellpadding="0" cellspacing="0" style="margin-bottom: 3.5em">
 		<thead>
 			<tr>
 				<th scope="col">名前</th>
@@ -69,7 +68,6 @@
 			</tr>
 		</tbody>
 		</table>
-		<?= '<br><br>' ?>
 	<?php endif; ?>
 
 	<!-- 常に表示 -->

@@ -6,8 +6,7 @@
 		<h3>【発送状況】</h3>
 		<!-- ログイン者が出品者で発送後の場合のみ表示 -->
 		<?php if ($contactEntity['is_shipped'] === true && $contactEntity['is_rated_by_bidder'] === false && $exhibitor_id === $authuser['id']): ?>
-			<p>※ 発送が完了しました。落札者からの受取評価をお待ちください。</p>
-			<?= '<br>' ?>
+			<p style="margin-bottom: 3.5em">※ 発送が完了しました。落札者からの受取評価をお待ちください。</p>
 		<?php endif; ?>
 		<!-- ログイン者が落札者で発送後の場合のみ表示 -->
 		<?php if ($contactEntity['is_shipped'] === true && $contactEntity['is_rated_by_bidder'] === false && $bidder_id === $authuser['id']): ?>
@@ -29,7 +28,7 @@
 			</fieldset>
 			<?= $this->Form->button(__('商品を受け取りました')) ?>
 			<?= $this->Form->end() ?>
-			<?= '<br><br>' ?>
+			<p style="margin-bottom: 2.5em"></p>
 		<?php endif; ?>
 	<?php endif; ?>
 
@@ -38,7 +37,7 @@
 		<h3>【取引状況】</h3>
 		<!-- ログイン者が落札者で、落札者のみ評価終了している場合のみ表示 -->
 		<?php if ($contactEntity['is_rated_by_exhibitor'] ===  false && $bidder_id === $authuser['id']): ?>
-			<p>※ 受取評価が完了しました。出品者からの評価をお待ちください。</p>
+			<p style="margin-bottom: 3.5em">※ 受取評価が完了しました。出品者からの評価をお待ちください。</p>
 		<?php endif; ?>
 		<!-- ログイン者が出品者で、落札者のみ評価終了している場合のみ表示 -->
 		<?php if ($contactEntity['is_rated_by_exhibitor'] ===  false && $exhibitor_id === $authuser['id']): ?>
@@ -59,20 +58,20 @@
 				?>
 			</fieldset>
 			<?= $this->Form->button(__('評価を送信します')) ?>
+			<p style="margin-bottom: 2.5em"></p>
 			<?= $this->Form->end() ?>
 		<?php endif; ?>
 		<!-- ログイン者が落札者か出品者で、両者の評価が完了した場合のみ表示 -->
 		<?php if ($contactEntity['is_rated_by_exhibitor'] ===  true): ?>
-		<p>※ 取引が完了しました。</p>
+		<p style="margin-bottom: 3.5em">※ 取引が完了しました。</p>
 		<?php endif; ?>
-		<br>
 	<?php endif; ?>
 
 	<!-- 発送先情報が送信された後の表示 -->
 	<!-- ログイン者が落札者・出品者どちらの場合も表示 -->
 	<?php if (!empty($contactEntity)): ?>
 		<h3>【発送先情報】</h3>
-		<table cellpadding="0" cellspacing="0">
+		<table cellpadding="0" cellspacing="0"  style="margin-bottom: 3.5em">
 		<thead>
 			<tr>
 				<th scope="col">名前</th>

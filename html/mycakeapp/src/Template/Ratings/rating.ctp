@@ -12,7 +12,7 @@
 <tbody>
 	<?php foreach ($reviews as $review): ?>
 	<tr>
-        <td><?= h($review->user->username) ?></td>
+        <td><?= h($review->rater_user->username) ?></td>
         <td><?= h($review->rate) ?></td>
         <td><?= h($review->comment) ?></td>
         <td><?= date('Y/n/j H:i', strtotime(h($review->created))) ?></td>

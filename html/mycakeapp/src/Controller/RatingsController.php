@@ -34,7 +34,7 @@ class RatingsController extends AuctionBaseController
         $authuser_id = $this->Auth->user()['id'];
         $reviews = $this->Ratings->find('all')
             ->where(['rate_target_id'=>$authuser_id])
-            ->contain(['Biditems', 'Users'])
+            ->contain(['Biditems', 'RaterUsers'])
             ->order(['Ratings.id'=>'desc']);
         $this->paginate = ['limit' => 10];
         $reviews = $this->paginate($reviews);
@@ -75,7 +75,6 @@ class RatingsController extends AuctionBaseController
 
 		// 落札者から受け取り評価連絡がPOSTされた場合
 		if (!empty($this->request->getData('rate'))) {
-
 			// ratingsテーブルに新レコードを作成する
 			$rating = $this->Ratings->newEntity();
 			// 送信された内容でエンティティを更新、追加情報を$ratingにセット

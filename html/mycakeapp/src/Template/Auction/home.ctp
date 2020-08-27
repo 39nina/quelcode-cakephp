@@ -13,10 +13,10 @@
 	<?php foreach ($bidinfo as $info): ?>
 	<tr>
 		<td><?= h($info->id) ?></td>
-		<td><?= h($info->biditem->name) ?></td>
-		<td><?= h($info->created) ?></td>
+		<td><?= $this->Html->link(h($info->biditem->name), '/auction/view/' . h($info->biditem->id)) ?></td>
+		<td><?= date('Y/n/j H:i', strtotime(h($info->created))) ?></td>
 		<td class="actions">
-			<?= $this->Html->link(__('View'), ['action' => 'msg', $info->id]) ?>
+			<?= $this->Html->link(__('View'), ['action' => 'contact', $info->id]) ?>
 		</td>
 	</tr>
 	<?php endforeach; ?>

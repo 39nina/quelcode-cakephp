@@ -23,6 +23,8 @@ class AuctionController extends AuctionBaseController
 		$this->loadModel('Bidrequests');
 		$this->loadModel('Bidinfo');
 		$this->loadModel('Bidmessages');
+		$this->loadModel('Contacts');
+		$this->loadModel('Ratings');
 		// ログインしているユーザー情報をauthuserに設定
 		$this->set('authuser', $this->Auth->user());
 		// レイアウトをauctionに変更
@@ -84,6 +86,9 @@ class AuctionController extends AuctionBaseController
 			$now = time();
 			$this->set(compact('endtime'));
 			$this->set(compact('now'));
+
+		//ログイン者のidを$login_idとして設定
+		$this->set('login_id', $this->Auth->user('id'));
 	}
 
 	// 出品する処理
@@ -216,5 +221,97 @@ class AuctionController extends AuctionBaseController
 			'order'=>['created'=>'desc'],
 			'limit' => 10])->toArray();
 		$this->set(compact('biditems'));
+	}
+
+	// 落札者とのメッセージ
+	public function contact($bidinfo_id = null)
+	{
+		// $bidinfo_idからBidinfoを取得する
+		try {
+			$bidinfo = $this->Bidinfo->get($bidinfo_id, ['contain'=>['Biditems']]);
+		} catch(Exception $e){
+			return $this->redirect(
+				['controller' => 'Auction', 'action' => 'index']
+			);
+		}
+
+		// 落札者idと出品者idを用意
+		$bidder_id = $bidinfo->user_id;
+		$exhibitor_id = $bidinfo->biditem->user_id;
+		$this->set(compact('bidder_id', 'exhibitor_id'));
+
+		// 取引連絡開始用に落札者の発送先情報連絡フォームを用意
+		// このオークションの取引連絡レコードが作られている場合、$contactEntityを設定
+		$biditem_id = $bidinfo->biditem_id;
+		$bidinfo_id = $bidinfo->id;
+		try {
+			$contactEntity = $this->Contacts->find('all',
+				 ['conditions'=>['biditem_id'=>$biditem_id]])->first();
+		} catch(Exception $e) {
+			$contactEntity = null;
+		}
+		$this->set(compact('contactEntity'));
+
+		$contact = $this->Contacts->newEntity();
+		// $contact（落札者情報）がPOSTされた時の処理
+		if (!empty($this->request->getData('name'))) {
+			// 送信されたフォーム内容、オークションidで$contactを更新、落札者情報フラグに1をセット
+			$contact = $this->Contacts->patchEntity($contact, $this->request->getData());
+			$contact->biditem_id =  $bidinfo->biditem_id;
+			$contact->sent_info = 1;
+			// Contactを保存
+			if ($this->Contacts->save($contact)) {
+				// 送信できたら、連絡先情報フォームを表示させないようにするため、$contactEntityに内容をセット
+				$contactEntity = $this->Contacts->find('all',
+				['conditions'=>['biditem_id'=>$biditem_id]])->first();
+				$this->set(compact('contactEntity'));
+				//重複送信防止
+				header('Location: ./' . $bidinfo_id);
+			} else {
+				$this->Flash->error(__('送信に失敗しました。もう一度入力下さい。'));
+			}
+		}
+
+		// 発送連絡がPOSTされた時の処理
+		if (!empty($this->request->getData('is_shipped'))) {
+			// 発送連絡フラグ（is_shipped）に1をセット
+			$contactEntity->is_shipped = 1;
+			// Contactを保存
+			if ($this->Contacts->save($contactEntity)) {
+				//重複送信防止
+				header('Location: ./' . $bidinfo_id);
+			} else {
+				$this->Flash->error(__('送信に失敗しました。もう一度押して下さい。'));
+			}
+		}
+
+		// 出品者が発送完了している場合、評価機能用のRatingsコントローラーに遷移
+		if ($contactEntity['is_shipped'] === true) {
+			$id = $bidinfo['id'];
+			return $this->redirect(
+				['controller' => 'Ratings', 'action' => 'contact', $id]
+			);
+		}
+
+		// Bidmessageを新たに用意
+		$bidmsg = $this->Bidmessages->newEntity();
+		// $bidmsg（メッセージ）がPOSTされた時の処理
+		if ($this->request->is('post') && !empty($this->request->getData('message'))) {
+			// 送信されたフォームで$bidmsgを更新
+			$bidmsg = $this->Bidmessages->patchEntity($bidmsg, $this->request->getData());
+			// Bidmessageを保存
+			if ($this->Bidmessages->save($bidmsg)) {
+				//重複送信防止
+				header('Location: ./' . $bidinfo_id);
+			} else {
+				$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
+			}
+		}
+		// Bidmessageをbidinfo_idとuser_idで検索
+		$bidmsgs = $this->Bidmessages->find('all',[
+			'conditions'=>['bidinfo_id'=>$bidinfo_id],
+			'contain' => ['Users'],
+			'order'=>['created'=>'desc']]);
+		$this->set(compact('bidmsgs', 'bidinfo', 'bidmsg'));
 	}
 }

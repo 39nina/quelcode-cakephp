@@ -51,7 +51,7 @@ class AuctionBaseController extends AppController
 			$this->Flash->error('ユーザー名かパスワードが間違っています。');
 		}
 	}
-	
+
 	// ログアウト処理
 	public function logout() {
 		// セッションを破棄
@@ -64,7 +64,7 @@ class AuctionBaseController extends AppController
 		parent::beforeFilter($event);
 		$this->Auth->allow([]);
 	}
-	
+
 	// 認証時のロールの処理
 	public function isAuthorized($user = null){
 		// 管理者はtrue
@@ -73,7 +73,7 @@ class AuctionBaseController extends AppController
 		}
 		// 一般ユーザーはAuctionControllerのみtrue、他はfalse
 		if($user['role'] === 'user'){
-			if ($this->name == 'Auction'){
+			if ($this->name == 'Auction' || $this->name == 'Ratings'){
 				return true;
 			} else {
 				return false;

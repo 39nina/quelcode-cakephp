@@ -90,6 +90,7 @@ class RatingsController extends AuctionBaseController
 			if ($this->Ratings->save($rating) && $this->Contacts->save($contactEntity)) {
 				//重複送信防止
 				header('Location: ./' . $bidinfo_id);
+				exit();
 			} else {
 				$this->Flash->error(__('送信に失敗しました。'));
 			}
@@ -112,6 +113,7 @@ class RatingsController extends AuctionBaseController
 			if ($this->Ratings->save($rating2) && $this->Contacts->save($contactEntity)) {
 				//重複送信防止
 				header('Location: ./' . $bidinfo_id);
+				exit();
 			} else {
 				$this->Flash->error(__('送信に失敗しました。'));
 			}
@@ -127,6 +129,7 @@ class RatingsController extends AuctionBaseController
 			if ($this->Bidmessages->save($bidmsg)) {
 				//重複送信防止
 				header('Location: ./' . $bidinfo_id);
+				exit();
 			} else {
 				$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
 			}

@@ -267,6 +267,7 @@ class AuctionController extends AuctionBaseController
 				$this->set(compact('contactEntity'));
 				//重複送信防止
 				header('Location: ./' . $bidinfo_id);
+				exit();
 			} else {
 				$this->Flash->error(__('送信に失敗しました。もう一度入力下さい。'));
 			}
@@ -280,6 +281,7 @@ class AuctionController extends AuctionBaseController
 			if ($this->Contacts->save($contactEntity)) {
 				//重複送信防止
 				header('Location: ./' . $bidinfo_id);
+				exit();
 			} else {
 				$this->Flash->error(__('送信に失敗しました。もう一度押して下さい。'));
 			}
@@ -303,6 +305,7 @@ class AuctionController extends AuctionBaseController
 			if ($this->Bidmessages->save($bidmsg)) {
 				//重複送信防止
 				header('Location: ./' . $bidinfo_id);
+				exit();
 			} else {
 				$this->Flash->error(__('保存に失敗しました。もう一度入力下さい。'));
 			}

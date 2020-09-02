@@ -100,6 +100,7 @@ return [
             'className' => FileEngine::class,
             'path' => CACHE,
             'url' => env('CACHE_DEFAULT_URL', null),
+            'mask' => 0666,
         ],
 
         /**
@@ -115,6 +116,7 @@ return [
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_CAKECORE_URL', null),
+            'mask' => 0666,
         ],
 
         /**
@@ -130,6 +132,7 @@ return [
             'serialize' => true,
             'duration' => '+1 years',
             'url' => env('CACHE_CAKEMODEL_URL', null),
+            'mask' => 0666,
         ],
 
         /**
@@ -256,21 +259,21 @@ return [
             'className' => Connection::class,
             'driver' => Mysql::class,
             'persistent' => false,
-            'host' => 'mysql',
+            'host' => 'localhost',
             /*
              * CakePHP will use the default DB port based on the driver selected
              * MySQL on MAMP uses port 8889, MAMP users will want to uncomment
              * the following line and set the port accordingly
              */
             //'port' => 'non_standard_port_number',
-            'username' => 'docker_db_user',
-            'password' => 'docker_db_user_pass',
-            'database' => 'docker_db',
+            'username' => 'root',
+            'password' => '392na2ki3',
+            'database' => 'server',
             /*
              * You do not need to set this flag to use full utf-8 encoding (internal default since CakePHP 3.6).
              */
             //'encoding' => 'utf8mb4',
-            'timezone' => 'Asia/Tokyo',
+            'timezone' => '',
             'flags' => [],
             'cacheMetadata' => true,
             'log' => false,
@@ -283,7 +286,7 @@ return [
              * decreases performance because each query needs to be traversed and
              * manipulated before being executed.
              */
-            'quoteIdentifiers' => false,
+            'quoteIdentifiers' => true,
 
             /**
              * During development, if using MySQL < 5.6, uncommenting the

@@ -1,3 +1,4 @@
+<?php $this->assign('title', 'オークション｜商品一覧'); ?>
 <h2>ミニオークション!</h2>
 <h3>※出品されている商品</h3>
 <table cellpadding="0" cellspacing="0">

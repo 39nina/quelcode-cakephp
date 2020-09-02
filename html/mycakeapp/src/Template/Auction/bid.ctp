@@ -1,3 +1,4 @@
+<?php $this->assign('title', 'オークション｜入札画面'); ?>
 <h2>「<?= $biditem->name ?>」の情報</h2>
 <?= $this->Form->create($bidrequest) ?>
 <fieldset>

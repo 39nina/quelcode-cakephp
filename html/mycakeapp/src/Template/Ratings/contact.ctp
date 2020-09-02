@@ -1,3 +1,4 @@
+<?php $this->assign('title', 'オークション｜取引画面'); ?>
 <?php if (!empty($bidinfo) && ($exhibitor_id === $authuser['id'] || $bidder_id === $authuser['id'])): ?>
 	<h2>商品「<?=$bidinfo->biditem->name ?>」</h2>
 

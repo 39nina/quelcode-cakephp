@@ -1,3 +1,4 @@
+<?php $this->assign('title', 'オークション｜出品画面'); ?>
 <h2>商品を出品する</h2>
 <?= $this->Form->create($biditem,[
 	'enctype' => 'multipart/form-data',

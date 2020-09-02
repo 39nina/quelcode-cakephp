@@ -1,3 +1,4 @@
+<?php $this->assign('title', 'オークション｜取引連絡'); ?>
 <?php if (!empty($bidinfo) && ($exhibitor_id === $authuser['id'] || $bidder_id === $authuser['id'])): ?>
 	<h2>商品「<?=$bidinfo->biditem->name ?>」</h2>
 	<!-- 落札者から取引先情報が送信される前 -->

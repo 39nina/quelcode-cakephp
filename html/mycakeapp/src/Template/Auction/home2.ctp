@@ -1,3 +1,4 @@
+<?php $this->assign('title', 'オークション｜出品情報'); ?>
 <h2><?= $authuser['username'] ?> のホーム</h2>
 <h3>※出品情報</h3>
 <table cellpadding="0" cellspacing="0">

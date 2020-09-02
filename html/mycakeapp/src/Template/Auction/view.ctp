@@ -1,3 +1,4 @@
+<?php $this->assign('title', 'オークション｜商品画面'); ?>
 <script type="text/javascript">
 	var endtime = '<?php echo $endtime; ?>';
 	var now = '<?php echo $now; ?>';
